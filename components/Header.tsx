@@ -18,8 +18,6 @@ export const Header = () => {
           </MenuItem>
         </Menu>
       </nav>
-
-      {/*<Search />*/}
     </Container>
   );
 };

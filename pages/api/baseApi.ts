@@ -1,4 +1,4 @@
-import {baseFetch} from "./baseFetch";
+import { baseFetch } from "./baseFetch";
 
 const getNews = async () => {
   return await baseFetch({

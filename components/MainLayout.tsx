@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import Head from "next/head";
 import {Header} from "./Header";
+import {FC} from "react";
 
-export const MainLayout = ({ children }) => {
+export const MainLayout: FC = ({ children }) => {
   return (
     <Container>
       <Head>

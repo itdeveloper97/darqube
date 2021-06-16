@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Children } from "react";
-import React from "react";
+import React, { Children, FC, PropsWithChildren } from "react";
+import { LinkProps } from "next/dist/client/link";
 
-export const ActiveLink = ({ children, activeClassName, ...rest }) => {
+interface IProps extends LinkProps {
+  activeClassName: string;
+}
+
+export const ActiveLink: FC<IProps> = ({
+  children,
+  activeClassName,
+  ...rest
+}) => {
   const { asPath } = useRouter();
-  const child = Children.only(children);
+  const child = Children.only<PropsWithChildren<any>>(children)!;
   const childClassName = child.props.className || "";
   const className =
     asPath === rest.href || asPath === rest.as
