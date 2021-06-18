@@ -1,23 +1,26 @@
 import styled, { css } from "styled-components";
 import { deviceSize } from "../../../assets/theme/device";
-import { NewsResponse } from "../../../pages/api/dto/News";
-import {timestampToDate} from "../../../core/helpers";
+import { timestampToDate } from "../../../core/helpers";
+import React from "react";
+import { useDispatch } from "react-redux";
+import {addInBookmark, FullNews, News} from "../newsSlice";
+import { FilledBookmarkIcon } from "../../../components/common/svg/FilledBookmarkIcon";
+import { BookmarkIcon } from "../../../components/common/svg/BookmarkIcon";
 
 interface IProps {
   latestNews?: boolean;
-  news: NewsResponse | null;
+  news: News | null;
 }
 
 export const NewsCard = ({ latestNews, news }: IProps) => {
+  const dispatch = useDispatch();
+  const handleBookmarkClick = (e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    dispatch(addInBookmark(news));
+  };
   return (
-    <Card
-      href={news?.url}
-      latestNews={latestNews}
-      target={"_blank"}
-    >
-      <Image
-      alt={news?.summary} src={news?.image}
-      />
+    <Card href={news?.url} latestNews={latestNews} target={"_blank"}>
+      <Image alt={news?.summary} src={news?.image} />
       <Content>
         <ContentHeader>
           <Related>{news?.related}</Related>
@@ -28,13 +31,15 @@ export const NewsCard = ({ latestNews, news }: IProps) => {
           <Summary>{news?.summary}</Summary>
           <CardNav>
             <Info>
-              {/*Todo*/}
-              {/*<Timestamp>{timestampToDate(news?.datetime}</Timestamp>*/}
+              <Timestamp>
+                {news?.datetime && timestampToDate(news?.datetime)}
+              </Timestamp>
               <Divider>{"|"}</Divider>
               <Source>{news?.source}</Source>
             </Info>
-
-              //Todo Bookmark
+            <Bookmark onClick={handleBookmarkClick}>
+              {news?.bookmark ? <FilledBookmarkIcon /> : <BookmarkIcon />}
+            </Bookmark>
           </CardNav>
         </ContentFooter>
       </Content>
@@ -157,7 +162,8 @@ const Source = styled.div`
   opacity: 0.35;
 `;
 
-const Bookmark = styled.i`
+const Bookmark = styled.div`
+  display: inline-block;
   height: 12px;
   width: 12px;
   min-width: 12px;

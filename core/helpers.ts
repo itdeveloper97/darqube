@@ -13,7 +13,7 @@ const MONTHS = [
   "Dec",
 ];
 
-export const timestampToDate = (timestamp: number) => {
+export const timestampToDate = (timestamp: number | undefined) => {
   const date = new Date(timestamp * 1000);
 
   return `${date.getDate()} ${MONTHS[date.getMonth()]}`;

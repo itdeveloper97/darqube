@@ -3,13 +3,21 @@ import { getNews } from "./newsActions";
 import { LoadState } from "../../core/redux/LoadState";
 import { NewsResponse } from "../../pages/api/dto/News";
 
-interface IInitialProps {
+export interface FullNews extends NewsResponse {
+  bookmark?: boolean;
+}
+
+export interface News extends FullNews {
+  [key: number]: FullNews;
+}
+
+export interface IInitialPropsNews {
   status: LoadState;
-  news: NewsResponse[] | null;
+  news: News[] | null;
   error: string | null;
 }
 
-const initialState: IInitialProps = {
+const initialState: IInitialPropsNews = {
   status: LoadState.needLoad,
   news: null,
   error: null,
@@ -18,7 +26,14 @@ const initialState: IInitialProps = {
 export const newsSlice = createSlice({
   name: "news",
   initialState,
-  reducers: {},
+  reducers: {
+    addInBookmark(state, { payload }) {
+      state.news[payload.id] = {
+        ...state.news[payload.id],
+        bookmark: !state.news[payload.id].bookmark
+      }
+    },
+  },
   extraReducers: {
     [getNews.pending.type]: (state) => {
       return {
@@ -33,7 +48,7 @@ export const newsSlice = createSlice({
         status: LoadState.idle,
       };
     },
-    [getNews.rejected.type]: (state, {payload}) => {
+    [getNews.rejected.type]: (state, { payload }) => {
       return {
         ...state,
         error: payload,
@@ -42,3 +57,5 @@ export const newsSlice = createSlice({
     },
   },
 });
+
+export const { addInBookmark } = newsSlice.actions;
