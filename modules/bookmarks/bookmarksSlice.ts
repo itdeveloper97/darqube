@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addInBookmark, IInitialPropsNews, News } from "../news/newsSlice";
-import { LoadState } from "../../core/redux/LoadState";
+import { addInBookmark, IInitialPropsNews, INews } from "../news/newsSlice";
 
 const initialState: Pick<IInitialPropsNews, "news"> = {
   news: null,
@@ -19,13 +18,15 @@ export const bookmarksSlice = createSlice({
           state.news = {
             ...state.news,
             [payload.id]: { ...payload, bookmark: true },
-          } as News[];
+          } as INews[];
         }
         if (!Object.keys(state.news).length) {
           state.news = null;
         }
       } else {
-        state.news = { [payload.id]: { ...payload, bookmark: true } } as News[];
+        state.news = {
+          [payload.id]: { ...payload, bookmark: true },
+        } as INews[];
       }
     },
   },

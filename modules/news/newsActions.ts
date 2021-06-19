@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { baseApi } from "../../pages/api/baseApi";
-import { News } from "./newsSlice";
+import { INews } from "./newsSlice";
 import { NewsResponse } from "../../pages/api/dto/News";
 
 export const getNews = createAsyncThunk("news/getNews", async (_, thunkAPI) => {
   try {
     return await baseApi.getNews().then((res) =>
-      res.reduce((acc: News, item: NewsResponse) => {
+      res.reduce((acc: INews, item: NewsResponse) => {
         acc[item.id] = {
           ...item,
-          bookmark: false
+          bookmark: false,
         };
         return acc;
       })

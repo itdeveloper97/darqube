@@ -7,13 +7,13 @@ export interface FullNews extends NewsResponse {
   bookmark?: boolean;
 }
 
-export interface News extends FullNews {
+export interface INews extends FullNews {
   [key: number]: FullNews;
 }
 
 export interface IInitialPropsNews {
   status: LoadState;
-  news: News[] | null;
+  news: INews[] | null;
   error: string | null;
 }
 
@@ -30,8 +30,8 @@ export const newsSlice = createSlice({
     addInBookmark(state, { payload }) {
       state.news[payload.id] = {
         ...state.news[payload.id],
-        bookmark: !state.news[payload.id].bookmark
-      }
+        bookmark: !state.news[payload.id].bookmark,
+      };
     },
   },
   extraReducers: {

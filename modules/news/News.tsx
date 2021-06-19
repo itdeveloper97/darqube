@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { getNews } from "./newsActions";
 import { useDispatch, useSelector } from "react-redux";
 import { newsListSelector, newsListStatus } from "./newsSelectors";
 import { LoadState } from "../../core/redux/LoadState";
 import { NewsList, NewsWrapper } from "../../components/common/NewsList";
 import { NewsCard } from "./components/NewsCard";
+import { addInBookmark } from "./newsSlice";
+import { INews } from "./newsSlice";
 
 export function News() {
   const dispatch = useDispatch();
@@ -15,8 +17,22 @@ export function News() {
     !news && dispatch(getNews());
   }, []);
 
+  const handleBookmarkClick = useCallback(
+    (news: INews) => {
+      dispatch(addInBookmark(news));
+    },
+    [dispatch, addInBookmark]
+  );
+
   const newsList = useMemo(
-    () => news?.map((item) => <NewsCard key={item.id} news={item} />),
+    () =>
+      news?.map((item) => (
+        <NewsCard
+          key={item.id}
+          news={item}
+          handleBookmarkClick={handleBookmarkClick}
+        />
+      )),
     [news]
   );
 
@@ -26,7 +42,13 @@ export function News() {
         <div style={{ color: "white" }}>...loading</div>
       ) : (
         <NewsWrapper>
-          <NewsCard latestNews={true} news={latestNews} />
+          {latestNews && (
+            <NewsCard
+              latestNews={true}
+              news={latestNews}
+              handleBookmarkClick={handleBookmarkClick}
+            />
+          )}
           <NewsList>{newsList}</NewsList>
         </NewsWrapper>
       )}

@@ -2,22 +2,23 @@ import styled, { css } from "styled-components";
 import { deviceSize } from "../../../assets/theme/device";
 import { timestampToDate } from "../../../core/helpers";
 import React from "react";
-import { useDispatch } from "react-redux";
-import {addInBookmark, FullNews, News} from "../newsSlice";
+import { INews } from "../newsSlice";
 import { FilledBookmarkIcon } from "../../../components/common/svg/FilledBookmarkIcon";
 import { BookmarkIcon } from "../../../components/common/svg/BookmarkIcon";
 
 interface IProps {
   latestNews?: boolean;
-  news: News | null;
+  news: INews | null;
+  handleBookmarkClick?: (news: INews) => void;
 }
 
-export const NewsCard = ({ latestNews, news }: IProps) => {
-  const dispatch = useDispatch();
-  const handleBookmarkClick = (e: React.TouchEvent | React.MouseEvent) => {
+export const NewsCard = ({ latestNews, news, handleBookmarkClick }: IProps) => {
+  const addedBookmark = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
-    dispatch(addInBookmark(news));
+    if (!handleBookmarkClick) return;
+    handleBookmarkClick(news);
   };
+
   return (
     <Card href={news?.url} latestNews={latestNews} target={"_blank"}>
       <Image alt={news?.summary} src={news?.image} />
@@ -37,7 +38,7 @@ export const NewsCard = ({ latestNews, news }: IProps) => {
               <Divider>{"|"}</Divider>
               <Source>{news?.source}</Source>
             </Info>
-            <Bookmark onClick={handleBookmarkClick}>
+            <Bookmark onClick={addedBookmark}>
               {news?.bookmark ? <FilledBookmarkIcon /> : <BookmarkIcon />}
             </Bookmark>
           </CardNav>
