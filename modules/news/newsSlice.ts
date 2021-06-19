@@ -11,11 +11,17 @@ export interface INews extends FullNews {
   [key: number]: FullNews;
 }
 
+interface IPagination {
+  currentPage: number;
+  pageSize: number;
+}
+
 export interface IInitialPropsNews {
   status: LoadState;
   news: INews[] | null;
   error: string | null;
   search: string | null;
+  pagination: IPagination;
 }
 
 const initialState: IInitialPropsNews = {
@@ -23,6 +29,10 @@ const initialState: IInitialPropsNews = {
   news: null,
   error: null,
   search: null,
+  pagination: {
+    currentPage: 1,
+    pageSize: 6,
+  },
 };
 
 export const newsSlice = createSlice({

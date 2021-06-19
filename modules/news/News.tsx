@@ -5,8 +5,9 @@ import { newsListSelector, newsListStatus } from "./newsSelectors";
 import { LoadState } from "../../core/redux/LoadState";
 import { NewsList, NewsWrapper } from "../../components/common/NewsList";
 import { NewsCard } from "./components/NewsCard";
-import { addInBookmark } from "./newsSlice";
-import { INews } from "./newsSlice";
+import { addInBookmark, INews } from "./newsSlice";
+import { CustomPagination } from "../../components/CustomPagination";
+import styled from "styled-components";
 
 export function News() {
   const dispatch = useDispatch();
@@ -41,17 +42,33 @@ export function News() {
       {status === LoadState.pending ? (
         <div style={{ color: "white" }}>...loading</div>
       ) : (
-        <NewsWrapper>
-          {latestNews && (
-            <NewsCard
-              latestNews={true}
-              news={latestNews}
-              handleBookmarkClick={handleBookmarkClick}
+        <>
+          <NewsWrapper>
+            {latestNews && (
+              <NewsCard
+                latestNews={true}
+                news={latestNews}
+                handleBookmarkClick={handleBookmarkClick}
+              />
+            )}
+            <NewsList>{newsList}</NewsList>
+          </NewsWrapper>
+          <PaginationWrapper>
+            <CustomPagination
+              pageCount={20}
+              pageRangeDisplayed={1}
+              marginPagesDisplayed={1}
+              previousLabel={"<"}
+              nextLabel={">"}
             />
-          )}
-          <NewsList>{newsList}</NewsList>
-        </NewsWrapper>
+          </PaginationWrapper>
+        </>
       )}
     </>
   );
 }
+
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
