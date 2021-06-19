@@ -1,14 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addInBookmark, IInitialPropsNews, INews } from "../news/newsSlice";
 
-const initialState: Pick<IInitialPropsNews, "news"> = {
+const initialState: Omit<IInitialPropsNews, "status" | "error"> = {
   news: null,
+  search: null,
 };
 
 export const bookmarksSlice = createSlice({
   name: "bookmarks",
   initialState,
-  reducers: {},
+  reducers: {
+    search(state, { payload }) {
+      state.search = payload;
+    },
+  },
   extraReducers: {
     [addInBookmark.type]: (state, { payload }) => {
       if (state.news) {
@@ -31,3 +36,5 @@ export const bookmarksSlice = createSlice({
     },
   },
 });
+
+export const { search: searchBookmarks } = bookmarksSlice.actions;

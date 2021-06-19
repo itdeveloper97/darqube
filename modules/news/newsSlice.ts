@@ -15,12 +15,14 @@ export interface IInitialPropsNews {
   status: LoadState;
   news: INews[] | null;
   error: string | null;
+  search: string | null;
 }
 
 const initialState: IInitialPropsNews = {
   status: LoadState.needLoad,
   news: null,
   error: null,
+  search: null,
 };
 
 export const newsSlice = createSlice({
@@ -32,6 +34,9 @@ export const newsSlice = createSlice({
         ...state.news[payload.id],
         bookmark: !state.news[payload.id].bookmark,
       };
+    },
+    search(state, { payload }) {
+      state.search = payload;
     },
   },
   extraReducers: {
@@ -58,4 +63,4 @@ export const newsSlice = createSlice({
   },
 });
 
-export const { addInBookmark } = newsSlice.actions;
+export const { addInBookmark, search: searchNewsAction } = newsSlice.actions;

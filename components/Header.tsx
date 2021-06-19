@@ -1,23 +1,30 @@
 import styled from "styled-components";
 import { ActiveLink } from "./common/ActiveLink";
+import { Search } from "./Search";
 
-export const Header = () => {
+interface IProps {
+  searchAction: (payload: string) => void;
+  searchString: string;
+}
+
+export const Header = ({ searchAction, searchString }: IProps) => {
   return (
     <Container>
-      <nav>
-        <Menu>
-          <MenuItem>
-            <ActiveLink href={"/"} activeClassName="active">
-              <MenuLink className="nav-link">News</MenuLink>
-            </ActiveLink>
-          </MenuItem>
-          <MenuItem>
-            <ActiveLink href={"/bookmarks"} activeClassName="active">
-              <MenuLink className="nav-link">Bookmarks</MenuLink>
-            </ActiveLink>
-          </MenuItem>
-        </Menu>
-      </nav>
+      <Menu>
+        <MenuItem>
+          <ActiveLink href={"/"} activeClassName="active">
+            <MenuLink className="nav-link">News</MenuLink>
+          </ActiveLink>
+        </MenuItem>
+        <MenuItem>
+          <ActiveLink href={"/bookmarks"} activeClassName="active">
+            <MenuLink className="nav-link">Bookmarks</MenuLink>
+          </ActiveLink>
+        </MenuItem>
+      </Menu>
+      {searchAction && (
+        <Search searchAction={searchAction} searchString={searchString} />
+      )}
     </Container>
   );
 };

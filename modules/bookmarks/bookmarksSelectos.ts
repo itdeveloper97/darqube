@@ -1,12 +1,17 @@
 import { RootState } from "../../core/redux/store";
+import { generateNews, searchItems } from "../../core/helpers";
 
 export const bookmarksListSelector = (state: RootState) => {
-  const bookmarks = state.bookmarks.news ? Object.values(state.bookmarks.news) : [];
+  let bookmarks = state.bookmarks.news
+    ? Object.values(state.bookmarks.news)
+    : [];
 
-  return {
-    latestNews: bookmarks.length ? bookmarks[0] : null,
-    news: bookmarks.length
-      ? bookmarks.slice(1).filter((item, index) => index < 6 && item)
-      : null,
-  };
+  if (bookmarks?.length && state.bookmarks.search) {
+    bookmarks = searchItems(bookmarks, state.bookmarks.search, "headline");
+  }
+
+  return generateNews(bookmarks);
 };
+
+export const bookmarksSearchString = (state: RootState) =>
+  state.bookmarks.search;

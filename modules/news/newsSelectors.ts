@@ -1,11 +1,15 @@
 import { RootState } from "../../core/redux/store";
+import { generateNews, searchItems } from "../../core/helpers";
 
 export const newsListSelector = (state: RootState) => {
-  const news = state.news.news ? Object.values(state.news.news) : [];
+  let news = state.news.news ? Object.values(state.news.news) : [];
 
-  return {
-    latestNews: news.length ? news[0] : null,
-    news: news.length ? news.slice(1).filter((item, index) => index < 6 && item) : null,
-  };
+  if (news?.length && state.news.search) {
+    news = searchItems(news, state.news.search, "headline");
+  }
+
+  return generateNews(news);
 };
 export const newsListStatus = (state: RootState) => state.news.status;
+
+export const newsSearchString = (state: RootState) => state.news.search;

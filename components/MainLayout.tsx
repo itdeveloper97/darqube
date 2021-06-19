@@ -1,21 +1,30 @@
 import styled from "styled-components";
 import Head from "next/head";
-import {Header} from "./Header";
-import {FC} from "react";
+import { Header } from "./Header";
+import { FC } from "react";
 
-export const MainLayout: FC = ({ children }) => {
+interface IProps {
+  title: string;
+  searchAction: (payload: string) => void;
+  searchString: string;
+}
+
+export const MainLayout: FC<IProps> = ({
+  children,
+  title,
+  searchAction,
+  searchString,
+}) => {
   return (
     <Container>
       <Head>
-        <title>news</title>
+        <title>{title}</title>
       </Head>
-      <Header />
+      <Header searchAction={searchAction} searchString={searchString} />
       {children}
-      <footer></footer>
     </Container>
   );
 };
-
 
 const Container = styled.div`
   min-height: 100vh;
