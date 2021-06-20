@@ -30,12 +30,14 @@ export const searchItems = <T>(
 };
 
 export const generateNews = <T>(
-  items: Array<T>
-): { latestNews: T; news: Array<T> } => {
+  items: Array<T>,
+  pagination: { currentPage: number; pageSize: number }
+): { latestNews: T; news: Array<T>; pageCount: number } => {
+  const start = pagination.currentPage * pagination.pageSize;
+  const end = start + pagination.pageSize;
   return {
     latestNews: items.length ? items[0] : null,
-    news: items.length
-      ? items.slice(1).filter((item, index) => index < 6 && item)
-      : null,
+    news: items.length ? items.slice(1).slice(start, end) : null,
+    pageCount: Math.ceil(items.length / pagination.pageSize),
   };
 };

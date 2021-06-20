@@ -8,8 +8,10 @@ export const newsListSelector = (state: RootState) => {
     news = searchItems(news, state.news.search, "headline");
   }
 
-  return generateNews(news);
+  return generateNews(news, state.news.pagination);
 };
 export const newsListStatus = (state: RootState) => state.news.status;
 
 export const newsSearchString = (state: RootState) => state.news.search;
+
+export const newsPaginationState = (state: RootState) => state.news.pagination;

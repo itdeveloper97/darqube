@@ -10,7 +10,7 @@ export const bookmarksListSelector = (state: RootState) => {
     bookmarks = searchItems(bookmarks, state.bookmarks.search, "headline");
   }
 
-  return generateNews(bookmarks);
+  return generateNews(bookmarks, state.bookmarks.pagination);
 };
 
 export const bookmarksSearchString = (state: RootState) =>

@@ -1,17 +1,22 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import { getNews } from "./newsActions";
 import { useDispatch, useSelector } from "react-redux";
-import { newsListSelector, newsListStatus } from "./newsSelectors";
+import {
+  newsListSelector,
+  newsListStatus,
+  newsPaginationState,
+} from "./newsSelectors";
 import { LoadState } from "../../core/redux/LoadState";
 import { NewsList, NewsWrapper } from "../../components/common/NewsList";
 import { NewsCard } from "./components/NewsCard";
-import { addInBookmark, INews } from "./newsSlice";
+import { addInBookmark, INews, paginationNewsAction } from "./newsSlice";
 import { CustomPagination } from "../../components/CustomPagination";
 import styled from "styled-components";
 
 export function News() {
   const dispatch = useDispatch();
-  const { news, latestNews } = useSelector(newsListSelector);
+  const { news, latestNews, pageCount } = useSelector(newsListSelector);
+  const paginationState = useSelector(newsPaginationState);
   const status = useSelector(newsListStatus);
 
   useEffect(() => {
@@ -37,6 +42,13 @@ export function News() {
     [news]
   );
 
+  const onPaginationChange = useCallback(
+    ({ currentPage, pageSize }) => {
+      dispatch(paginationNewsAction({ currentPage, pageSize }));
+    },
+    [dispatch]
+  );
+
   return (
     <>
       {status === LoadState.pending ? (
@@ -55,11 +67,14 @@ export function News() {
           </NewsWrapper>
           <PaginationWrapper>
             <CustomPagination
-              pageCount={20}
+              pageCount={pageCount}
               pageRangeDisplayed={1}
               marginPagesDisplayed={1}
               previousLabel={"<"}
               nextLabel={">"}
+              onChange={onPaginationChange}
+              pageSizes={[6, 12]}
+              initialState={paginationState}
             />
           </PaginationWrapper>
         </>

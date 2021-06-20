@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getNews } from "./newsActions";
 import { LoadState } from "../../core/redux/LoadState";
 import { NewsResponse } from "../../pages/api/dto/News";
@@ -30,7 +30,7 @@ const initialState: IInitialPropsNews = {
   error: null,
   search: null,
   pagination: {
-    currentPage: 1,
+    currentPage: 0,
     pageSize: 6,
   },
 };
@@ -45,8 +45,11 @@ export const newsSlice = createSlice({
         bookmark: !state.news[payload.id].bookmark,
       };
     },
-    search(state, { payload }) {
+    search(state, { payload }: PayloadAction<string | null>) {
       state.search = payload;
+    },
+    pagination(state, { payload }) {
+      state.pagination = { ...payload };
     },
   },
   extraReducers: {
@@ -73,4 +76,8 @@ export const newsSlice = createSlice({
   },
 });
 
-export const { addInBookmark, search: searchNewsAction } = newsSlice.actions;
+export const {
+  addInBookmark,
+  search: searchNewsAction,
+  pagination: paginationNewsAction,
+} = newsSlice.actions;

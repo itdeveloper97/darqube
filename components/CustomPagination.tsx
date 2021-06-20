@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Pagination, { ReactPaginateProps } from "react-paginate";
 import styled from "styled-components";
 import { SelectArrow } from "./common/svg/SelectArrow";
+
+interface IPaginationState {
+  currentPage: number;
+  pageSize: number;
+}
 
 interface IProps
   extends Omit<
@@ -10,22 +15,69 @@ interface IProps
     | "previousClassName"
     | "containerClassName"
     | "activeClassName"
-  > {}
+    | "onPageChange"
+  > {
+  onChange?: ({ currentPage, pageSize }: IPaginationState) => void;
+  initialState?: IPaginationState;
+  pageSizes: number[];
+}
 
-export const CustomPagination = ({ ...rest }: IProps) => {
+export const CustomPagination = ({
+  onChange,
+  initialState = { currentPage: 0, pageSize: 6 },
+  pageSizes,
+  ...rest
+}: IProps) => {
+  console.log(initialState);
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [state, setState] = useState(initialState);
+  const onPageSizeChange = (e) => {
+    setState((prevState) => ({
+      ...prevState,
+      pageSize: Number(e.target.value),
+    }));
+  };
+  const onPageChange = ({ selected }) => {
+    setState((prevState) => ({ ...prevState, currentPage: selected }));
+  };
+
+  useEffect(() => {
+    if (!isFirstRender && onChange) {
+      onChange({ ...state });
+    }
+  }, [state]);
+
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
+
+  const pageOptions = useMemo(
+    () =>
+      pageSizes.map((item) => (
+        <option key={item} value={item}>
+          {item}
+        </option>
+      )),
+    [pageSizes]
+  );
+
   return (
     <Container>
       <Show>
         <Label>Show</Label>
         <SelectWrapper>
-          <Select defaultValue={6}>
-            <option value={6}>6</option>
-            <option value={12}>12</option>
+          <Select defaultValue={state.pageSize} onChange={onPageSizeChange}>
+            {pageOptions}
           </Select>
           <SelectArrow />
         </SelectWrapper>
       </Show>
-      <Pagination {...rest} containerClassName={"pagination"} />
+      <Pagination
+        initialPage={state.currentPage}
+        {...rest}
+        containerClassName={"pagination"}
+        onPageChange={onPageChange}
+      />
     </Container>
   );
 };

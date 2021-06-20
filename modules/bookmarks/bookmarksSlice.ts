@@ -4,6 +4,10 @@ import { addInBookmark, IInitialPropsNews, INews } from "../news/newsSlice";
 const initialState: Omit<IInitialPropsNews, "status" | "error"> = {
   news: null,
   search: null,
+  pagination: {
+    currentPage: 0,
+    pageSize: 6,
+  },
 };
 
 export const bookmarksSlice = createSlice({
@@ -12,6 +16,9 @@ export const bookmarksSlice = createSlice({
   reducers: {
     search(state, { payload }) {
       state.search = payload;
+    },
+    pagination(state, { payload }) {
+      state.pagination = { ...payload };
     },
   },
   extraReducers: {
@@ -37,4 +44,7 @@ export const bookmarksSlice = createSlice({
   },
 });
 
-export const { search: searchBookmarks } = bookmarksSlice.actions;
+export const {
+  search: searchBookmarksAction,
+  pagination: paginationBookmarksAction,
+} = bookmarksSlice.actions;

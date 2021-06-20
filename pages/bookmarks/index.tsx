@@ -1,6 +1,6 @@
 import { MainLayout } from "../../components/MainLayout";
 import { Bookmarks } from "../../modules/bookmarks/Bookmarks";
-import { searchBookmarks } from "../../modules/bookmarks/bookmarksSlice";
+import { searchBookmarksAction } from "../../modules/bookmarks/bookmarksSlice";
 import { useSelector } from "react-redux";
 import { bookmarksSearchString } from "../../modules/bookmarks/bookmarksSelectos";
 
@@ -9,7 +9,7 @@ export default function Main() {
   return (
     <MainLayout
       title={"Bookmarks"}
-      searchAction={searchBookmarks}
+      searchAction={searchBookmarksAction}
       searchString={searchString}
     >
       <Bookmarks />
