@@ -15,3 +15,6 @@ export const bookmarksListSelector = (state: RootState) => {
 
 export const bookmarksSearchString = (state: RootState) =>
   state.bookmarks.search;
+
+export const bookmarksPaginationState = (state: RootState) =>
+  state.bookmarks.pagination;

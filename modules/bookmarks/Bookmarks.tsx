@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo } from "react";
 import { NewsList, NewsWrapper } from "../../components/common/NewsList";
 import { useDispatch, useSelector } from "react-redux";
-import { bookmarksListSelector } from "./bookmarksSelectos";
+import {
+  bookmarksListSelector,
+  bookmarksPaginationState,
+} from "./bookmarksSelectos";
 import { NewsCard } from "../news/components/NewsCard";
 import { CustomPagination } from "../../components/CustomPagination";
 import styled from "styled-components";
@@ -10,6 +13,7 @@ import { paginationBookmarksAction } from "./bookmarksSlice";
 export function Bookmarks() {
   const dispatch = useDispatch();
   const { latestNews, news, pageCount } = useSelector(bookmarksListSelector);
+  const paginationState = useSelector(bookmarksPaginationState);
 
   const newsList = useMemo(
     () => news?.map((item) => <NewsCard key={item.id} news={item} />),
@@ -38,6 +42,7 @@ export function Bookmarks() {
           nextLabel={">"}
           onChange={onPaginationChange}
           pageSizes={[6, 12]}
+          initialState={paginationState}
         />
       </PaginationWrapper>
     </>
