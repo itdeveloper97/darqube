@@ -5,10 +5,14 @@ import { useDispatch } from "react-redux";
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   searchAction: (payload: string) => void;
-  searchString: string;
+  searchString?: string;
 }
 
-export const Search = ({ searchAction, searchString, ...rest }: IProps) => {
+export const Search = ({
+  searchAction,
+  searchString = "",
+  ...rest
+}: IProps) => {
   const [search, setSearch] = useState(searchString);
   const dispatch = useDispatch();
 
@@ -18,7 +22,7 @@ export const Search = ({ searchAction, searchString, ...rest }: IProps) => {
     }
   }, [search]);
 
-  const onSearch = (e) => {
+  const onSearch = (e: { target: { value: React.SetStateAction<string> } }) => {
     setSearch(e.target.value);
   };
   return (

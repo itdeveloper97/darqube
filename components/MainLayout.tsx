@@ -4,9 +4,9 @@ import { Header } from "./Header";
 import { FC } from "react";
 
 interface IProps {
-  title: string;
-  searchAction: (payload: string) => void;
-  searchString: string;
+  title?: string;
+  searchAction?: (payload: string) => void;
+  searchString?: string;
 }
 
 export const MainLayout: FC<IProps> = ({

@@ -3,8 +3,8 @@ import { ActiveLink } from "./common/ActiveLink";
 import { Search } from "./Search";
 
 interface IProps {
-  searchAction: (payload: string) => void;
-  searchString: string;
+  searchAction?: (payload: string) => void;
+  searchString?: string;
 }
 
 export const Header = ({ searchAction, searchString }: IProps) => {
@@ -19,6 +19,11 @@ export const Header = ({ searchAction, searchString }: IProps) => {
         <MenuItem>
           <ActiveLink href={"/bookmarks"} activeClassName="active">
             <MenuLink className="nav-link">Bookmarks</MenuLink>
+          </ActiveLink>
+        </MenuItem>
+        <MenuItem>
+          <ActiveLink href={"/forex-matrix"} activeClassName="active">
+            <MenuLink className="nav-link">Forex Matrix</MenuLink>
           </ActiveLink>
         </MenuItem>
       </Menu>
