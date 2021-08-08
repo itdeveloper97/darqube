@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { MainLayout } from "../../components/MainLayout";
 import { existingMatrix } from "./data";
 import { useEffect, useState } from "react";
@@ -502,112 +503,73 @@ export default function ForexMatrix() {
     setMatrix(convertToMatrix(existingMatrix.cells));
   }, []);
 
-  useEffect(() => {
-    console.log(matrix);
-  }, [matrix]);
-
   return (
     <MainLayout>
-      <h1>halo</h1>
-      <table
-        style={{
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        <tbody>
-          {/*{matrix &&*/}
-          {/*  Object.entries(matrix).map(([key, row], rowIndex) => {*/}
-          {/*    if (rowIndex === 0) {*/}
-          {/*      return (*/}
-          {/*        <tr key={key}>*/}
-          {/*          <td>*/}
-          {/*            <div>+</div>*/}
-          {/*            <div>{key}</div>*/}
-          {/*          </td>*/}
-          {/*          {Object.entries(row).map(([key, col], colIndex) => {*/}
-          {/*            return (*/}
-          {/*              <td key={key}>*/}
-          {/*                <div>{key}</div>*/}
-          {/*                {col ? (*/}
-          {/*                  <div>{col.price}</div>*/}
-          {/*                ) : (*/}
-          {/*                  <div*/}
-          {/*                    style={{*/}
-          {/*                      backgroundColor: "aqua",*/}
-          {/*                      height: "20px",*/}
-          {/*                    }}*/}
-          {/*                  />*/}
-          {/*                )}*/}
-          {/*              </td>*/}
-          {/*            );*/}
-          {/*          })}*/}
-          {/*        </tr>*/}
-          {/*      );*/}
-          {/*    }*/}
-          {/*    return (*/}
-          {/*      <tr key={key}>*/}
-          {/*        <td>{key}</td>*/}
-          {/*        {Object.entries(row).map(([key, col], colIndex) => {*/}
-          {/*          return (*/}
-          {/*            <td key={key}>*/}
-          {/*              {col ? (*/}
-          {/*                <div>{col.price}</div>*/}
-          {/*              ) : (*/}
-          {/*                <div*/}
-          {/*                  style={{*/}
-          {/*                    backgroundColor: "aqua",*/}
-          {/*                    height: "20px",*/}
-          {/*                  }}*/}
-          {/*                />*/}
-          {/*              )}*/}
-          {/*            </td>*/}
-          {/*          );*/}
-          {/*        })}*/}
-          {/*      </tr>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          <ForexTable>
-            <TopCurrencyBar>
-              {matrix && Object.keys(matrix).map((item) => <Col>{item}</Col>)}
-            </TopCurrencyBar>
-            <LeftCurrencyBar>
-              {matrix && Object.keys(matrix).map((item) => <Col>{item}</Col>)}
-            </LeftCurrencyBar>
-            <Table>
-              {matrix &&
-                Object.values(matrix).map((row, rowIndex, rowArr) => {
-                  return (
-                    <Row>
-                      {Object.values(row).map((col, colIndex) => {
-                        if (rowIndex === colIndex) {
-                          return (
-                            <>
-                              <Col>empty</Col>
-                              <Col>{col.price}</Col>
-                            </>
-                          );
-                        }
-                        return <Col>{col.price}</Col>;
-                      })}
-                    </Row>
-                  );
-                })}
-            </Table>
-          </ForexTable>
-        </tbody>
-      </table>
+      {matrix && (
+        <ForexTable cols={Object.keys(matrix).length + 1}>
+          <TTopCurrencyBar>
+            {matrix &&
+              Object.keys(matrix).map((currency) => (
+                <Col key={currency}>{currency}</Col>
+              ))}
+          </TTopCurrencyBar>
+          <TLeftCurrencyBar>
+            <Col>+</Col>
+            {matrix &&
+              Object.keys(matrix).map((currency) => (
+                <Col key={currency}>{currency}</Col>
+              ))}
+          </TLeftCurrencyBar>
+          <TBody>
+            {Object.values(matrix).map((row, rowIndex, rowArr) => {
+              return (
+                <Row key={rowIndex}>
+                  {Object.values(row).map((col, colIndex, colArr) => {
+                    if (rowIndex === colIndex) {
+                      return (
+                        <Fragment key={col.price}>
+                          <Col>empty</Col>
+                          <Col>{col.price}</Col>
+                        </Fragment>
+                      );
+                    }
+                    if (!rowArr[rowIndex + 1] && !colArr[colIndex + 1]) {
+                      return (
+                        <Fragment key={col.price}>
+                          <Col>{col.price}</Col>
+                          <Col>empty</Col>
+                        </Fragment>
+                      );
+                    }
+                    return <Col key={col.price}>{col.price}</Col>;
+                  })}
+                </Row>
+              );
+            })}
+          </TBody>
+        </ForexTable>
+      )}
     </MainLayout>
   );
 }
 
-const ForexTable = styled.div``;
-const TopCurrencyBar = styled.div`
-  display: flex;
+const ForexTable = styled.div<{ cols: number }>`
+  color: white;
+  display: grid;
+  grid-template-areas:
+    "leftBar topBar"
+    "leftBar table";
+  grid-template-columns: ${({ cols }) => cols && `calc(100% / ${cols})`};
 `;
-const LeftCurrencyBar = styled.div``;
-const Table = styled.div`
-  width: 100%;
+const TTopCurrencyBar = styled.div`
+  display: flex;
+  grid-area: topBar;
+`;
+const TLeftCurrencyBar = styled.div`
+  grid-area: leftBar;
+`;
+const TBody = styled.div`
+  grid-area: table;
 `;
 const Row = styled.div`
   display: flex;
