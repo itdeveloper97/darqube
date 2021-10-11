@@ -12,7 +12,7 @@ export default function Main() {
       searchAction={searchNewsAction}
       searchString={searchString}
     >
-      <News />
+      {/*<News />*/}
     </MainLayout>
   );
 }
